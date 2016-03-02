@@ -22,7 +22,8 @@
         android:text="@string/play_stop_button"
         android:id="@+id/play_stop_btn"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="playSound"/>
 
     <Button
         android:layout_width="wrap_content"
