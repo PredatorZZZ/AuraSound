@@ -13,33 +13,33 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/playingNow"
         android:text="@string/sound_now"
         android:textSize="40dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/play_stop_button"
-        android:id="@+id/play_stop_btn"
+        android:text="@string/playStopButton"
+        android:id="@+id/playStopButton"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="playSound"/>
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/prev_button"
-        android:id="@+id/button2"
-        android:layout_alignBottom="@+id/play_stop_btn"
-        android:layout_toLeftOf="@+id/play_stop_btn"
-        android:layout_toStartOf="@+id/play_stop_btn" />
+        android:id="@+id/prevButton"
+        android:layout_alignBottom="@+id/playStopButton"
+        android:layout_toLeftOf="@+id/playStopButton"
+        android:layout_toStartOf="@+id/playStopButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/next_button"
-        android:id="@+id/button3"
-        android:layout_alignTop="@+id/play_stop_btn"
-        android:layout_toRightOf="@+id/play_stop_btn"
-        android:layout_toEndOf="@+id/play_stop_btn" />
+        android:id="@+id/nextButton"
+        android:layout_alignTop="@+id/playStopButton"
+        android:layout_toRightOf="@+id/playStopButton"
+        android:layout_toEndOf="@+id/playStopButton" />
 </RelativeLayout>
