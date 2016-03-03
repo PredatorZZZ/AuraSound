@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     MediaPlayer mySound;
-    private static String TAG;
+    private static String TAG = "LOGGIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +33,23 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.prevButton:
                         break;
                     case R.id.playStopButton:
-                        mySound.start();
+                        if(mySound.isPlaying()){
+                            mySound.pause();
+                            Log.d(TAG, "Stop");
+                        }else{
+                            mySound.start();
+                            Log.d(TAG, "Starting");
+                        }
                         break;
                 }
-
             }
         };
     nextButton.setOnClickListener(listener);
     prevButton.setOnClickListener(listener);
     playButton.setOnClickListener(listener);
     }
+
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
