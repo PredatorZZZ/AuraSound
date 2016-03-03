@@ -1,15 +1,19 @@
 package com.company.predator.aurasound;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     MediaPlayer mySound;
+    private static String TAG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +45,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        TextView playNow = (TextView) findViewById(R.id.playingNow);
+        switch (item.getItemId()){
+            case R.id.settings:
+//                playNow.setText("Settings option");
+                Log.d(TAG, "Setting works Fine");
+
+                return true;
+            case R.id.about:
+//                playNow.setText("About option");
+                Log.d(TAG, "About works Fine");
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
