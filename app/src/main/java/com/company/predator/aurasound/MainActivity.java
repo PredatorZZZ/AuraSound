@@ -12,38 +12,63 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    MediaPlayer mySound;
+    MediaPlayer currentSound;
+    int[] sounds;
+    int[] soundsNames;
+    int currentIndex = 0;
+    int currentNameIndex = 0;
     private static String TAG = "LOGGIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mySound = MediaPlayer.create(this, R.raw.rain);
+        sounds = new int[] {R.raw.rain, R.raw.sea, R.raw.birds};
+        soundsNames = new int[] {R.string.soundNameRain,
+                                 R.string.soundNameSea,
+                                 R.string.soundNameBirds};
+
+        currentSound = MediaPlayer.create(this, sounds[currentIndex]);
+
         Button nextButton = (Button) findViewById(R.id.nextButton);
         Button prevButton = (Button) findViewById(R.id.prevButton);
         Button playButton = (Button) findViewById(R.id.playStopButton);
-        TextView playNow = (TextView) findViewById(R.id.playingNow);
+        final TextView playNow = (TextView) findViewById(R.id.playingNow);
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()){
                     case R.id.nextButton:
+                        if (currentNameIndex<sounds.length - 1){currentNameIndex++;}
+                        else currentNameIndex = 0;
+                        Log.i(TAG, String.valueOf(currentNameIndex));
+                        playNow.setText(soundsNames[currentNameIndex]);
                         break;
+
                     case R.id.prevButton:
+                        if (currentNameIndex>0){currentNameIndex--;}
+                        else currentNameIndex = soundsNames.length - 1;
+                        Log.i(TAG, String.valueOf(currentNameIndex));
+                        playNow.setText(soundsNames[currentNameIndex]);
                         break;
+
                     case R.id.playStopButton:
-                        if(mySound.isPlaying()){
-                            mySound.pause();
+                        if(currentSound.isPlaying()){
+                            currentSound.pause();
                             Log.d(TAG, "Stop");
-                        }else{
-                            mySound.start();
-                            Log.d(TAG, "Starting");
+                        }
+                        else{
+                            currentSound.start();
+                            currentSound.setLooping(true);
+                            Log.d(TAG, "Starting + Looping");
                         }
                         break;
                 }
             }
         };
+
+    Log.i(TAG, "App ready");
     nextButton.setOnClickListener(listener);
     prevButton.setOnClickListener(listener);
     playButton.setOnClickListener(listener);
@@ -57,15 +82,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-//        TextView playNow = (TextView) findViewById(R.id.playingNow);
         switch (item.getItemId()){
             case R.id.settings:
-//                playNow.setText("Settings option");
                 Log.d(TAG, "Setting works Fine");
-
                 return true;
             case R.id.about:
-//                playNow.setText("About option");
                 Log.d(TAG, "About works Fine");
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 return true;
