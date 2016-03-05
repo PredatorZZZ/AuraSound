@@ -35,15 +35,28 @@ public class MainActivity extends AppCompatActivity {
         Button playButton = (Button) findViewById(R.id.playStopButton);
         final TextView playNow = (TextView) findViewById(R.id.playingNow);
 
-        View.OnClickListener listener = new View.OnClickListener() {
+        final View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()){
                     case R.id.nextButton:
-                        if (currentNameIndex<sounds.length - 1){currentNameIndex++;}
+                        if (currentNameIndex<soundsNames.length - 1){currentNameIndex++;}
                         else currentNameIndex = 0;
                         Log.i(TAG, String.valueOf(currentNameIndex));
                         playNow.setText(soundsNames[currentNameIndex]);
+
+                        if (currentIndex<sounds.length-1){currentIndex++;}
+                        else currentIndex = 0;
+                        Log.i(TAG, "currentIndex: " + String.valueOf(currentIndex));
+                        currentSound.reset();
+
+                        if (currentSound.isPlaying()) {
+                            currentSound.stop();
+                            currentSound.release();
+                            currentSound = null;
+                        }
+                        currentSound = MediaPlayer.create(MainActivity.this, sounds[currentIndex]);
+                        currentSound.start();
                         break;
 
                     case R.id.prevButton:
@@ -51,6 +64,19 @@ public class MainActivity extends AppCompatActivity {
                         else currentNameIndex = soundsNames.length - 1;
                         Log.i(TAG, String.valueOf(currentNameIndex));
                         playNow.setText(soundsNames[currentNameIndex]);
+
+                        if (currentIndex>0){currentIndex--;}
+                        else currentIndex = sounds.length-1;
+                        Log.i(TAG, "currentIndex: " + String.valueOf(currentIndex));
+                        currentSound.reset();
+
+                        if (currentSound.isPlaying()) {
+                            currentSound.stop();
+                            currentSound.release();
+                            currentSound = null;
+                        }
+                        currentSound = MediaPlayer.create(MainActivity.this, sounds[currentIndex]);
+                        currentSound.start();
                         break;
 
                     case R.id.playStopButton:
@@ -66,14 +92,21 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+
         };
 
+    playNow.setText(soundsNames[currentNameIndex]);
     Log.i(TAG, "App ready");
     nextButton.setOnClickListener(listener);
     prevButton.setOnClickListener(listener);
     playButton.setOnClickListener(listener);
     }
 
+    protected void onDestroy(){
+        currentSound.release();
+        super.onDestroy();
+
+    }
 
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Setting works Fine");
                 return true;
             case R.id.about:
-                Log.d(TAG, "About works Fine");
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 return true;
         }
