@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     MediaPlayer currentSound;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button nextButton = (Button) findViewById(R.id.nextButton);
         Button prevButton = (Button) findViewById(R.id.prevButton);
-        Button playButton = (Button) findViewById(R.id.playStopButton);
+        final Button playButton = (Button) findViewById(R.id.playStopButton);
         final TextView playNow = (TextView) findViewById(R.id.playingNow);
 
         final View.OnClickListener listener = new View.OnClickListener() {
@@ -42,52 +43,53 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nextButton:
                         if (currentNameIndex<soundsNames.length - 1){currentNameIndex++;}
                         else currentNameIndex = 0;
-                        Log.i(TAG, String.valueOf(currentNameIndex));
+
                         playNow.setText(soundsNames[currentNameIndex]);
 
                         if (currentIndex<sounds.length-1){currentIndex++;}
                         else currentIndex = 0;
-                        Log.i(TAG, "currentIndex: " + String.valueOf(currentIndex));
                         currentSound.reset();
 
                         if (currentSound.isPlaying()) {
                             currentSound.stop();
                             currentSound.release();
                             currentSound = null;
+                            playButton.setText(R.string.playStopButton);
                         }
                         currentSound = MediaPlayer.create(MainActivity.this, sounds[currentIndex]);
                         currentSound.start();
+                        playButton.setText(R.string.playStop);
                         break;
 
                     case R.id.prevButton:
                         if (currentNameIndex>0){currentNameIndex--;}
                         else currentNameIndex = soundsNames.length - 1;
-                        Log.i(TAG, String.valueOf(currentNameIndex));
                         playNow.setText(soundsNames[currentNameIndex]);
 
                         if (currentIndex>0){currentIndex--;}
                         else currentIndex = sounds.length-1;
-                        Log.i(TAG, "currentIndex: " + String.valueOf(currentIndex));
                         currentSound.reset();
 
                         if (currentSound.isPlaying()) {
                             currentSound.stop();
                             currentSound.release();
                             currentSound = null;
+                            playButton.setText(R.string.playStopButton);
                         }
                         currentSound = MediaPlayer.create(MainActivity.this, sounds[currentIndex]);
                         currentSound.start();
+                        playButton.setText(R.string.playStop);
                         break;
 
                     case R.id.playStopButton:
                         if(currentSound.isPlaying()){
                             currentSound.pause();
-                            Log.d(TAG, "Stop");
+                            playButton.setText(R.string.playStopButton);
                         }
                         else{
                             currentSound.start();
                             currentSound.setLooping(true);
-                            Log.d(TAG, "Starting + Looping");
+                            playButton.setText(R.string.playStop);
                         }
                         break;
                 }
@@ -105,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy(){
         currentSound.release();
         super.onDestroy();
-
     }
 
 
@@ -116,8 +117,13 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.list_sounds:
+                Log.i(TAG, "Sounds list launch");
+                startActivity(new Intent(MainActivity.this, ListActivity.class));
+                return true;
             case R.id.settings:
-                Log.d(TAG, "Setting works Fine");
+                Toast toast = Toast.makeText(getApplicationContext(), "Settings will be avalible soon", Toast.LENGTH_SHORT);
+                toast.show();
                 return true;
             case R.id.about:
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
